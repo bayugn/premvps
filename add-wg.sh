@@ -1,8 +1,13 @@
 #!/bin/bash
+# Debian 9 & 10 64bit
+# Ubuntu 18.04 & 20.04 bit
+# Centos 7 & 8 64bit 
+# By GilaGajet
+# ==================================================
 red='\e[1;31m'
 green='\e[0;32m'
 NC='\e[0m'
-MYIP=$(wget -qO- icanhazip.com);
+MYIP=$(wget -qO- ifconfig.co);
 echo "Checking VPS"
 IZIN=$( curl https://raw.githubusercontent.com/gilagajet/premvps/main/ipvps.conf | grep $MYIP )
 if [ $MYIP = $IZIN ]; then
@@ -17,7 +22,7 @@ clear
 source /etc/wireguard/params
 source /var/lib/premium-script/ipvps.conf
 if [[ "$IP" = "" ]]; then
-SERVER_PUB_IP=$(wget -qO- icanhazip.com);
+SERVER_PUB_IP=$(wget -qO- ifconfig.co);
 else
 SERVER_PUB_IP=$IP
 fi

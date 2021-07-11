@@ -1,8 +1,13 @@
 #!/bin/bash
+# Debian 9 & 10 64bit
+# Ubuntu 18.04 & 20.04 bit
+# Centos 7 & 8 64bit 
+# By GilaGajet
+# ==================================================
 red='\e[1;31m'
 green='\e[0;32m'
 NC='\e[0m'
-MYIP=$(wget -qO- icanhazip.com);
+MYIP=$(wget -qO- ifconfig.co);
 echo "Checking VPS"
 IZIN=$( curl https://raw.githubusercontent.com/gilagajet/premvps/main/ipvps.conf | grep $MYIP )
 if [ $MYIP = $IZIN ]; then
@@ -47,7 +52,7 @@ cat>/etc/v2ray/$user-tls.json<<EOF
       "id": "${uuid}",
       "aid": "64",
       "net": "ws",
-      "path": "/vpninjector",
+      "path": "/gilagajet",
       "type": "none",
       "host": "",
       "tls": "tls"
@@ -62,7 +67,7 @@ cat>/etc/v2ray/$user-none.json<<EOF
       "id": "${uuid}",
       "aid": "64",
       "net": "ws",
-      "path": "/vpninjector",
+      "path": "/gilagajet",
       "type": "none",
       "host": "",
       "tls": "none"
@@ -86,7 +91,7 @@ echo -e "id             : ${uuid}"
 echo -e "alterId        : 64"
 echo -e "Security       : auto"
 echo -e "network        : ws"
-echo -e "path           : /vpninjector"
+echo -e "path           : /gilagajet"
 echo -e "================================="
 echo -e "link TLS       : ${vmesslink1}"
 echo -e "================================="

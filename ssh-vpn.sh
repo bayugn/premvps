@@ -1,11 +1,13 @@
 #!/bin/bash
-# By Horasss
-#
+# Debian 9 & 10 64bit
+# Ubuntu 18.04 & 20.04 bit
+# Centos 7 & 8 64bit 
+# By GilaGajet
 # ==================================================
 
 # initializing var
 export DEBIAN_FRONTEND=noninteractive
-MYIP=$(wget -qO- icanhazip.com);
+MYIP=$(wget -qO- ifconfig.co);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
 NET=$(ip -o $ANU -4 route show to default | awk '{print $5}');
 source /etc/os-release
@@ -51,7 +53,7 @@ cat > /etc/rc.local <<-END
 exit 0
 END
 
-# Ubah izin akses
+# change permission
 chmod +x /etc/rc.local
 
 # enable rc local
@@ -90,6 +92,7 @@ rm /etc/nginx/sites-enabled/default
 rm /etc/nginx/sites-available/default
 wget -O /etc/nginx/nginx.conf "https://raw.githubusercontent.com/gilagajet/premvps/main/nginx.conf"
 mkdir -p /home/vps/public_html
+echo "<pre>Property of GilaGajet</pre>" > /home/vps/public_html/index.html
 wget -O /etc/nginx/conf.d/vps.conf "https://raw.githubusercontent.com/gilagajet/premvps/main/vps.conf"
 /etc/init.d/nginx restart
 
@@ -132,18 +135,19 @@ sed -i $MYIP2 /etc/squid/squid.conf
 apt -y install vnstat
 /etc/init.d/vnstat restart
 apt -y install libsqlite3-dev
-wget https://humdi.net/vnstat/vnstat-2.6.tar.gz
-tar zxvf vnstat-2.6.tar.gz
-cd vnstat-2.6
+wget https://humdi.net/vnstat/vnstat-2.7.tar.gz
+tar zxvf vnstat-2.7.tar.gz
+cd vnstat-2.7
 ./configure --prefix=/usr --sysconfdir=/etc && make && make install
 cd
-vnstat -u -i $NET
+#vnstat -u -i $NET
+vnstat -i $NET
 sed -i 's/Interface "'""eth0""'"/Interface "'""$NET""'"/g' /etc/vnstat.conf
 chown vnstat:vnstat /var/lib/vnstat -R
 systemctl enable vnstat
 /etc/init.d/vnstat restart
-rm -f /root/vnstat-2.6.tar.gz
-rm -rf /root/vnstat-2.6
+rm -f /root/vnstat-2.7.tar.gz
+rm -rf /root/vnstat-2.7
 
 # install stunnel
 apt install stunnel4 -y
@@ -170,7 +174,7 @@ openssl req -new -x509 -key key.pem -out cert.pem -days 1095 \
 -subj "/C=$country/ST=$state/L=$locality/O=$organization/OU=$organizationalunit/CN=$commonname/emailAddress=$email"
 cat key.pem cert.pem >> /etc/stunnel/stunnel.pem
 
-# konfigurasi stunnel
+# configure stunnel
 sed -i 's/ENABLED=0/ENABLED=1/g' /etc/default/stunnel4
 /etc/init.d/stunnel4 restart
 
@@ -232,7 +236,7 @@ netfilter-persistent reload
 cd /usr/bin
 wget -O add-host "https://raw.githubusercontent.com/gilagajet/premvps/main/add-host.sh"
 wget -O about "https://raw.githubusercontent.com/gilagajet/premvps/main/about.sh"
-wget -O menu "https://raw.githubusercontent.com/gilagajet/premvps/main/menu.sh"
+wget -O menu "https://raw.githubusercontent.com/gilagajet/premvps/main/menur.sh"
 wget -O usernew "https://raw.githubusercontent.com/gilagajet/premvps/main/usernew.sh"
 wget -O trial "https://raw.githubusercontent.com/gilagajet/premvps/main/trial.sh"
 wget -O hapus "https://raw.githubusercontent.com/gilagajet/premvps/main/hapus.sh"
@@ -260,7 +264,6 @@ wget -O port-vless "https://raw.githubusercontent.com/gilagajet/premvps/main/por
 wget -O wbmn "https://raw.githubusercontent.com/gilagajet/premvps/main/webmin.sh"
 wget -O xp "https://raw.githubusercontent.com/gilagajet/premvps/main/xp.sh"
 wget -O kernel-updt "https://raw.githubusercontent.com/gilagajet/premvps/main/kernel-update.sh"
-wget -O openvpn-menu "https://raw.githubusercontent.com/gilagajet/premvps/main/openvpn-menu.sh"
 chmod +x add-host
 chmod +x menu
 chmod +x usernew
@@ -291,9 +294,11 @@ chmod +x port-vless
 chmod +x wbmn
 chmod +x xp
 chmod +x kernel-updt
-chmod +x openvpn-menu
+
+# set autoreboot
 echo "0 5 * * * root clear-log && reboot" >> /etc/crontab
 echo "0 0 * * * root xp" >> /etc/crontab
+
 # remove unnecessary files
 cd
 apt autoclean -y
@@ -303,6 +308,7 @@ apt-get -y --purge remove apache2*;
 apt-get -y --purge remove bind9*;
 apt-get -y remove sendmail*
 apt autoremove -y
+
 # finishing
 cd
 chown -R www-data:www-data /home/vps/public_html

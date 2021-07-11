@@ -1,20 +1,30 @@
 #!/bin/bash
+# Debian 9 & 10 64bit
+# Ubuntu 18.04 & 20.04 bit
+# Centos 7 & 8 64bit 
+# By GilaGajet
+# ==================================================
 domain=$(cat /root/domain)
 apt install iptables iptables-persistent -y
 apt install curl socat xz-utils wget apt-transport-https gnupg gnupg2 gnupg1 dnsutils lsb-release -y 
 apt install socat cron bash-completion ntpdate -y
-ntpdate pool.ntp.org
+ntpdate time.google.com
 apt -y install chrony
 timedatectl set-ntp true
+
 systemctl enable chronyd && systemctl restart chronyd
 systemctl enable chrony && systemctl restart chrony
+
 timedatectl set-timezone Asia/Kuala_Lumpur
+
 chronyc sourcestats -v
 chronyc tracking -v
+
 date
 
 mkdir -p /etc/trojan/
 touch /etc/trojan/akun.conf
+
 # install v2ray
 wget https://raw.githubusercontent.com/gilagajet/premvps/main/go.sh && chmod +x go.sh && ./go.sh
 rm -f /root/go.sh
@@ -24,6 +34,7 @@ curl https://acme-install.netlify.app/acme.sh -o /root/.acme.sh/acme.sh
 chmod +x /root/.acme.sh/acme.sh
 /root/.acme.sh/acme.sh --issue -d $domain --standalone -k ec-256
 ~/.acme.sh/acme.sh --installcert -d $domain --fullchainpath /etc/v2ray/v2ray.crt --keypath /etc/v2ray/v2ray.key --ecc
+
 service squid start
 uuid=$(cat /proc/sys/kernel/random/uuid)
 cat> /etc/v2ray/config.json << END
@@ -58,7 +69,7 @@ cat> /etc/v2ray/config.json << END
           ]
         },
         "wsSettings": {
-          "path": "/vpninjector",
+          "path": "/gilagajet",
           "headers": {
             "Host": ""
           }
@@ -146,7 +157,7 @@ cat> /etc/v2ray/none.json << END
       "streamSettings": {
         "network": "ws",
         "wsSettings": {
-          "path": "/vpninjector",
+          "path": "/gilagajet",
           "headers": {
             "Host": ""
           }
@@ -243,7 +254,7 @@ cat> /etc/v2ray/vless.json << END
           ]
         },
         "wsSettings": {
-          "path": "/vpninjector",
+          "path": "/gilagajet",
           "headers": {
             "Host": ""
           }
@@ -330,7 +341,7 @@ cat> /etc/v2ray/vnone.json << END
       "streamSettings": {
         "network": "ws",
         "wsSettings": {
-          "path": "/vpninjector",
+          "path": "/gilagajet",
           "headers": {
             "Host": ""
           }
@@ -493,7 +504,7 @@ systemctl enable v2ray
 
 # download script
 cd /usr/bin
-wget -O add-ws "https://raw.githubusercontent.com/gilagajet/premvps/main/menur.sh"
+#wget -O menu "https://raw.githubusercontent.com/gilagajet/premvps/main/menu.sh"
 wget -O add-ws "https://raw.githubusercontent.com/gilagajet/premvps/main/add-ws.sh"
 wget -O add-vless "https://raw.githubusercontent.com/gilagajet/premvps/main/add-vless.sh"
 wget -O add-tr "https://raw.githubusercontent.com/gilagajet/premvps/main/add-tr.sh"
@@ -519,7 +530,6 @@ wget -O shadowsocks "https://raw.githubusercontent.com/gilagajet/premvps/main/sh
 wget -O wireguard "https://raw.githubusercontent.com/gilagajet/premvps/main/wireguard.sh"
 wget -O options "https://raw.githubusercontent.com/gilagajet/premvps/main/vvt-options.sh"
 wget -O update "https://raw.githubusercontent.com/gilagajet/premvps/main/update.sh"
-chmod +x menur.sh
 chmod +x add-ws
 chmod +x add-vless
 chmod +x add-tr

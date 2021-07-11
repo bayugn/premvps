@@ -2,7 +2,7 @@
 # Debian 9 & 10 64bit
 # Ubuntu 18.04 & 20.04 bit
 # Centos 7 & 8 64bit 
-# By Horasss
+# By GilaGajet
 # ==================================================
 
 VPN_IPSEC_PSK='myvpn'
@@ -19,7 +19,7 @@ mkdir -p /opt/src
 cd /opt/src
 
 bigecho "Trying to auto discover IP of this server..."
-PUBLIC_IP=$(wget -qO- icanhazip.com);
+PUBLIC_IP=$(wget -qO- ifconfig.co);
 
 bigecho "Installing packages required for the VPN..."
 if [[ ${OS} == "centos" ]]; then
@@ -65,6 +65,7 @@ fi
 /bin/rm -rf "/opt/src/libreswan-$SWAN_VER"
 tar xzf "$swan_file" && /bin/rm -f "$swan_file"
 cd "libreswan-$SWAN_VER" || exit 1
+
 cat > Makefile.inc.local <<'EOF'
 WERROR_CFLAGS = -w
 USE_DNSSEC = false
@@ -74,6 +75,7 @@ USE_NSS_AVA_COPY = true
 USE_NSS_IPSEC_PROFILE = false
 USE_GLIBC_KERN_FLIP_HEADERS = true
 EOF
+
 if ! grep -qs IFLA_XFRM_LINK /usr/include/linux/if_link.h; then
   echo "USE_XFRM_INTERFACE_IFLA_HEADER = true" >> Makefile.inc.local
 fi
@@ -103,8 +105,8 @@ L2TP_LOCAL=192.168.42.1
 L2TP_POOL=192.168.42.10-192.168.42.250
 XAUTH_NET=192.168.43.0/24
 XAUTH_POOL=192.168.43.10-192.168.43.250
-DNS_SRV1=8.8.8.8
-DNS_SRV2=8.8.4.4
+DNS_SRV1=1.1.1.1
+DNS_SRV2=1.0.0.01
 DNS_SRVS="\"$DNS_SRV1 $DNS_SRV2\""
 [ -n "$VPN_DNS_SRV1" ] && [ -z "$VPN_DNS_SRV2" ] && DNS_SRVS="$DNS_SRV1"
 
@@ -234,8 +236,8 @@ refuse-chap
 refuse-mschap
 require-mschap-v2
 require-mppe-128
-ms-dns 8.8.8.8
-ms-dns 8.8.4.4
+ms-dns 1.1.1.1
+ms-dns 1.0.0.1
 proxyarp
 lock
 nobsdcomp 
@@ -277,12 +279,16 @@ mkdir -p /run/pluto
 service fail2ban restart 2>/dev/null
 service ipsec restart 2>/dev/null
 service xl2tpd restart 2>/dev/null
+
 wget -O /usr/bin/add-l2tp https://raw.githubusercontent.com/gilagajet/premvps/main/add-l2tp.sh && chmod +x /usr/bin/add-l2tp
 wget -O /usr/bin/del-l2tp https://raw.githubusercontent.com/gilagajet/premvps/main/del-l2tp.sh && chmod +x /usr/bin/del-l2tp
 wget -O /usr/bin/add-pptp https://raw.githubusercontent.com/gilagajet/premvps/main/add-pptp.sh && chmod +x /usr/bin/add-pptp
 wget -O /usr/bin/del-pptp https://raw.githubusercontent.com/gilagajet/premvps/main/del-pptp.sh && chmod +x /usr/bin/del-pptp
 wget -O /usr/bin/renew-pptp https://raw.githubusercontent.com/gilagajet/premvps/main/renew-pptp.sh && chmod +x /usr/bin/renew-pptp
 wget -O /usr/bin/renew-l2tp https://raw.githubusercontent.com/gilagajet/premvps/main/renew-l2tp.sh && chmod +x /usr/bin/renew-l2tp
+
 touch /var/lib/premium-script/data-user-l2tp
 touch /var/lib/premium-script/data-user-pptp
+
+rm -f /root/ipsec.sh
 rm -f /root/ipsec.sh

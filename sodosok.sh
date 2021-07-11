@@ -1,5 +1,10 @@
 #!/bin/bash
-#shadowsocks-libev obfs install by Horasss
+# Debian 9 & 10 64bit
+# Ubuntu 18.04 & 20.04 bit
+# Centos 7 & 8 64bit 
+# By GilaGajet
+# ==================================================
+#shadowsocks-libev obfs install by GilaGajet
 source /etc/os-release
 OS=$ID
 ver=$VERSION_ID
@@ -46,7 +51,7 @@ cat > /etc/shadowsocks-libev/config.json <<END
     "timeout":60,
     "method":"aes-256-cfb",
     "fast_open":true,
-    "nameserver":"8.8.8.8",
+    "nameserver":"1.1.1.1",
     "mode":"tcp_and_udp",
 }
 END
@@ -77,6 +82,7 @@ cat > /etc/shadowsocks-libev.json <<END
 }
 END
 chmod +x /etc/shadowsocks-libev.json
+
 echo "#############################################"
 
 echo -e "">>"/etc/shadowsocks-libev/akun.conf"
@@ -87,6 +93,8 @@ iptables -I INPUT -m state --state NEW -m tcp -p tcp --dport 2443:3543 -j ACCEPT
 iptables -I INPUT -m state --state NEW -m udp -p udp --dport 2443:3543 -j ACCEPT
 iptables-save > /etc/iptables.up.rules
 ip6tables-save > /etc/ip6tables.up.rules
+
+
 cd /usr/bin
 wget -O add-ss "https://raw.githubusercontent.com/gilagajet/premvps/main/add-ss.sh"
 wget -O del-ss "https://raw.githubusercontent.com/gilagajet/premvps/main/del-ss.sh"
@@ -96,5 +104,6 @@ chmod +x add-ss
 chmod +x del-ss
 chmod +x cek-ss
 chmod +x renew-ss
+
 cd
 rm -f /root/sodosok.sh

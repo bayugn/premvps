@@ -1,4 +1,9 @@
 #!/bin/bash
+# Debian 9 & 10 64bit
+# Ubuntu 18.04 & 20.04 bit
+# Centos 7 & 8 64bit 
+# By GilaGajet
+# ==================================================
 # Proxy For Edukasi & Imclass
 # ==============================
 
@@ -9,7 +14,7 @@ chmod +x /usr/local/bin/edu-proxy
 # Installing Service
 cat > /etc/systemd/system/edu-proxy.service << END
 [Unit]
-Description=Python Edu Proxy By Horasss Service
+Description=Python Edu Proxy By GilaGajet Service
 Documentation=https://vpnstores.net
 After=network.target nss-lookup.target
 

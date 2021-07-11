@@ -1,4 +1,9 @@
 #!/bin/bash
+# Debian 9 & 10 64bit
+# Ubuntu 18.04 & 20.04 bit
+# Centos 7 & 8 64bit 
+# By GilaGajet
+# ==================================================
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
@@ -26,10 +31,12 @@ Separator_1="——————————————————————�
 check_pid(){
 	PID=`ps -ef |grep -v grep | grep server.py |awk '{print $2}'`
 }
+
 Add_iptables(){
 		iptables -I INPUT -m state --state NEW -m tcp -p tcp --dport 1443:1543 -j ACCEPT
 		iptables -I INPUT -m state --state NEW -m udp -p udp --dport 1443:1543 -j ACCEPT
 }
+
 Save_iptables(){
 if [[ ${OS} == "centos" ]]; then
 		service iptables save
@@ -38,6 +45,7 @@ else
 		iptables-save > /etc/iptables.up.rules
 fi
 }
+
 Set_iptables(){
 if [[ ${OS} == "centos" ]]; then
 		service iptables save
@@ -50,13 +58,16 @@ else
 		chmod +x /etc/network/if-pre-up.d/iptables
 fi
 }
+
 Set_user_api_server_pub_addr(){
-ip=$(wget -qO- ipv4.icanhazip.com);
+ip=$(wget -qO- ipv4.ifconfig.co);
 ssr_server_pub_addr="${ip}"
 }
+
 Modify_user_api_server_pub_addr(){
 	sed -i "s/SERVER_PUB_ADDR = '${server_pub_addr}'/SERVER_PUB_ADDR = '${ssr_server_pub_addr}'/" ${config_user_api_file}
 }
+
 Check_python(){
 if [[ ${OS} == "centos" ]]; then
 if [[ $ver == '7' ]]; then
@@ -69,6 +80,7 @@ else
 apt-get install -y python
 fi
 }
+
 Centos_yum(){
 	yum update
 	cat /etc/redhat-release |grep 7\..*|grep -i centos>/dev/null
@@ -82,6 +94,7 @@ Debian_apt(){
 	apt-get update
 	apt-get install -y vim unzip cron git net-tools
 }
+
 Download_SSR(){
 	cd "/usr/local"
 	git clone -b akkariiin/master https://github.com/shadowsocksrr/shadowsocksr.git
@@ -94,6 +107,7 @@ Download_SSR(){
 	Modify_user_api_server_pub_addr
 	sed -i 's/ \/\/ only works under multi-user mode//g' "${config_user_file}"
 }
+
 Service_SSR(){
 if [[ ${OS} = "centos" ]]; then
 wget --no-check-certificate https://raw.githubusercontent.com/hybtoy/ssrrmu/master/ssrmu_centos -O /etc/init.d/ssrmu
@@ -106,11 +120,13 @@ chmod +x /etc/init.d/ssrmu
 update-rc.d -f ssrmu defaults
 fi
 }
+
 JQ_install(){
 cd "${ssr_folder}"
 wget --no-check-certificate "https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64" -O ${jq_file}
 chmod +x ${jq_file}
 }
+
 Installation_dependency(){
 if [[ ${OS} == "centos" ]]; then
 		Centos_yum
@@ -120,11 +136,13 @@ if [[ ${OS} == "centos" ]]; then
 		/etc/init.d/cron restart
 	fi
 }
+
 Start_SSR(){
 	check_pid
 	wget -O /etc/init.d/ssrmu "https://raw.githubusercontent.com/gilagajet/premvps/main/ssrmu"
 	/etc/init.d/ssrmu start
 }
+
 Install_SSR(){
 Set_user_api_server_pub_addr
 Check_python
@@ -137,10 +155,12 @@ Add_iptables
 Save_iptables
 Start_SSR
 }
+
 Install_SSR
 wget -O /usr/bin/ssr https://raw.githubusercontent.com/gilagajet/premvps/main/ssrmu.sh && chmod +x /usr/bin/ssr
 wget -O /usr/bin/add-ssr https://raw.githubusercontent.com/gilagajet/premvps/main/add-ssr.sh && chmod +x /usr/bin/add-ssr
 wget -O /usr/bin/del-ssr https://raw.githubusercontent.com/gilagajet/premvps/main/del-ssr.sh && chmod +x /usr/bin/del-ssr
 wget -O /usr/bin/renew-ssr https://raw.githubusercontent.com/gilagajet/premvps/main/renew-ssr.sh && chmod +x /usr/bin/renew-ssr
 touch /usr/local/shadowsocksr/akun.conf
+
 rm -f /root/ssr.sh

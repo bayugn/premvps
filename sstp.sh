@@ -1,10 +1,16 @@
 #!/bin/bash
-MYIP=$(wget -qO- icanhazip.com);
+# Debian 9 & 10 64bit
+# Ubuntu 18.04 & 20.04 bit
+# Centos 7 & 8 64bit 
+# By GilaGajet
+# ==================================================
+MYIP=$(wget -qO- ifconfig.co);
 MYIP2="s/xxxxxxxxx/$MYIP/g";
 NIC=$(ip -o $ANU -4 route show to default | awk '{print $5}');
 source /etc/os-release
 OS=$ID
 ver=$VERSION_ID
+
 if [[ $OS == 'ubuntu' ]]; then
 if [[ "$ver" = "18.04" ]]; then
 yoi=Ubuntu18
@@ -18,17 +24,19 @@ elif [[ "$ver" = "10" ]]; then
 yoi=Debian10
 fi
 fi
+
 mkdir /home/sstp
 touch /home/sstp/sstp_account
 touch /var/lib/premium-script/data-user-sstp
+
 #detail nama perusahaan
-country=ID
-state=Indonesia
-locality=Indonesia
-organization=www.vpninjector.com
-organizationalunit=www.vpninjector.com
-commonname=www.vpninjector.com
-email=admin@vpninjector.com
+country=MY
+state=Malaysia
+locality=MAlaysia
+organization=www.gilagajet.com
+organizationalunit=www.gilagajet.com
+commonname=www.gilagajet.com
+email=admin@gilagajet.com
 
 #install sstp
 apt-get install -y build-essential cmake gcc linux-headers-`uname -r` git libpcre3-dev libssl-dev liblua5.1-0-dev ppp
@@ -45,6 +53,7 @@ sed -i $MYIP2 /etc/accel-ppp.conf
 chmod +x /etc/accel-ppp.conf
 systemctl start accel-ppp
 systemctl enable accel-ppp
+
 #gen cert sstp
 cd /home/sstp
 openssl genrsa -out ca.key 4096
@@ -61,10 +70,12 @@ iptables-save > /etc/iptables.up.rules
 iptables-restore -t < /etc/iptables.up.rules
 netfilter-persistent save > /dev/null
 netfilter-persistent reload > /dev/null
+
 #input perintah sstp
 wget -O /usr/bin/add-sstp https://raw.githubusercontent.com/gilagajet/premvps/main/add-sstp.sh && chmod +x /usr/bin/add-sstp
 wget -O /usr/bin/del-sstp https://raw.githubusercontent.com/gilagajet/premvps/main/del-sstp.sh && chmod +x /usr/bin/del-sstp
 wget -O /usr/bin/cek-sstp https://raw.githubusercontent.com/gilagajet/premvps/main/cek-sstp.sh && chmod +x /usr/bin/cek-sstp
 wget -O /usr/bin/renew-sstp https://raw.githubusercontent.com/gilagajet/premvps/main/renew-sstp.sh && chmod +x /usr/bin/renew-sstp
+
 rm -f /root/sstp.sh
 
