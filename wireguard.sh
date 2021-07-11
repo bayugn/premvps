@@ -1,9 +1,14 @@
 #!/bin/bash
+# Debian 9 & 10 64bit
+# Ubuntu 18.04 & 20.04 bit
+# Centos 7 & 8 64bit 
+# By GilaGajet
+# ==================================================
 
 echo -e "                                                   "| lolcat
 echo -e "[*][*][*]======================================[*][*][*]"| lolcat
 echo -e "                                                   "| lolcat
-echo -e "            AutoScript By GilaGajet"| lolcat
+echo -e "            AutoScript By gilagajet.com"| lolcat
 echo -e "                                                   "| lolcat
 echo -e "            [1] Create Account Wireguard"| lolcat
 echo -e "            [2] Delete Account Wireguard"| lolcat

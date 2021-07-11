@@ -1,9 +1,14 @@
 #!/bin/bash
+# Debian 9 & 10 64bit
+# Ubuntu 18.04 & 20.04 bit
+# Centos 7 & 8 64bit 
+# By GilaGajet
+# ==================================================
 
 cat /usr/bin/bannermenu | lolcat
-echo -e "[*][*][*]======================================[*][*][*]"| lolcat
+echo -e "                                 [*][*][*]======================================[*][*][*]"| lolcat
 echo -e "                                                  "| lolcat
-echo -e "            AutoScript by GilaGajet"| lolcat
+echo -e "            AutoScript by gilagajet.com"| lolcat
 echo -e "                                                   "| lolcat
 echo -e "            [1] Create Account Vmess"| lolcat
 echo -e "            [2] Create Account Vless"| lolcat

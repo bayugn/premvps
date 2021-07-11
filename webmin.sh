@@ -1,8 +1,13 @@
 #!/bin/bash
+# Debian 9 & 10 64bit
+# Ubuntu 18.04 & 20.04 bit
+# Centos 7 & 8 64bit 
+# By GilaGajet
+# ==================================================
 red='\e[1;31m'
 green='\e[0;32m'
 NC='\e[0m'
-MYIP=$(wget -qO- icanhazip.com);
+MYIP=$(wget -qO- ifconfig.co);
 echo "Checking VPS"
 IZIN=$( curl https://raw.githubusercontent.com/gilagajet/premvps/main/ipvps.conf | grep $MYIP )
 if [ $MYIP = $IZIN ]; then
@@ -35,7 +40,7 @@ clear
 echo ""
 echo " Done Install Webmin"
 echo " $IP:10000"
-echo " AutoScriptVPS By  Horasss"
+echo " AutoScriptVPS By  GilaGajet"
 }
 function restart () {
 echo " Restarting Webmin"
@@ -45,7 +50,7 @@ echo " Start Uninstall Webmin"
 clear
 echo ""
 echo " Done Restart Webmin"
-echo " AutoScriptVPS By  Horasss"
+echo " AutoScriptVPS By  GilaGajet"
 }
 function uninstall () {
 echo " Removing Repositori Webmin"
@@ -58,7 +63,7 @@ apt autoremove --purge webmin -y > /dev/null 2>&1
 clear
 echo ""
 echo " Done Uninstall Webmin"
-echo " AutoScriptVPS By  Horasss"
+echo " AutoScriptVPS By  GilaGajet"
 }
 if [[ "$cek" = "perl" ]]; then
 sts="${Info}"
@@ -73,7 +78,7 @@ echo -e " Status $sts"
 echo -e "  1. Install Webmin"
 echo -e "  2. Restart Webmin"
 echo -e "  3. Uninstall Webmin"
-echo -e " AutoScriptVPS By  Horasss"
+echo -e " AutoScriptVPS By  GilaGajet"
 echo -e " Press CTRL+C to return"
 read -rp " Please Enter The Correct Number : " -e num
 if [[ "$num" = "1" ]]; then

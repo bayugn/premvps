@@ -1,6 +1,11 @@
 #!/bin/bash
 # Debian 9 & 10 64bit
 # Ubuntu 18.04 & 20.04 bit
+# Centos 7 & 8 64bit 
+# By GilaGajet
+# ==================================================
+# Debian 9 & 10 64bit
+# Ubuntu 18.04 & 20.04 bit
 # Centos 7 & 8 64bit
 
 
@@ -21,7 +26,7 @@ if [[ -e /etc/wireguard/params ]]; then
 	exit 1
 fi
 
-echo -e "${Info} Wireguard VPS AutoScript by bosok69"
+echo -e "${Info} Wireguard VPS AutoScript by GilaGajet"
 # Detect public IPv4 address and pre-fill for the user
 
 # Detect public interface and pre-fill for the user
@@ -42,6 +47,7 @@ elif [[ ${OS} == 'centos' ]]; then
 	yum -y install wireguard-dkms wireguard-tools
 	fi
 apt install iptables iptables-persistent -y
+
 # Make sure the directory exists (this does not seem the be the case on fedora)
 mkdir /etc/wireguard >/dev/null 2>&1
 
@@ -54,7 +60,7 @@ SERVER_PUB_KEY=$(echo "$SERVER_PRIV_KEY" | wg pubkey)
 echo "SERVER_PUB_NIC=$SERVER_PUB_NIC
 SERVER_WG_NIC=wg0
 SERVER_WG_IPV4=10.66.66.1
-SERVER_PORT=5820
+SERVER_PORT=2408
 SERVER_PRIV_KEY=$SERVER_PRIV_KEY
 SERVER_PUB_KEY=$SERVER_PUB_KEY" >/etc/wireguard/params
 
@@ -72,7 +78,7 @@ iptables -t nat -I POSTROUTING -s 10.66.66.1/24 -o $SERVER_PUB_NIC -j MASQUERADE
 iptables -I INPUT 1 -i wg0 -j ACCEPT
 iptables -I FORWARD 1 -i $SERVER_PUB_NIC -o wg0 -j ACCEPT
 iptables -I FORWARD 1 -i wg0 -o $SERVER_PUB_NIC -j ACCEPT
-iptables -I INPUT 1 -i $SERVER_PUB_NIC -p udp --dport 5820 -j ACCEPT
+iptables -I INPUT 1 -i $SERVER_PUB_NIC -p udp --dport 2408 -j ACCEPT
 iptables-save > /etc/iptables.up.rules
 iptables-restore -t < /etc/iptables.up.rules
 netfilter-persistent save
@@ -95,5 +101,6 @@ chmod +x add-wg
 chmod +x del-wg
 chmod +x cek-wg
 chmod +x renew-wg
+
 cd
 rm -f /root/wg.sh
